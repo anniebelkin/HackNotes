@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>How to Get First Place in Every TryHackMe League (While Actually Learning)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f3f5fa;--surface:#fff;--surface2:#eaeef6;--text:#1c2538;--muted:#5b667d;--border:#d6dce9;
+  --accent:#4f8a0b;--accent-bg:#88cc14;--on-accent:#0e1424;--warn:#a15c00;--warn-bg:#fff3dc;
+  box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0e1424;--surface:#1c2538;--surface2:#141c2f;--text:#e8ecf5;--muted:#9aa6bf;--border:#2c3750;
+  --accent:#a3ea2a;--accent-bg:#a3ea2a;--on-accent:#0e1424;--warn:#ffc561;--warn-bg:#2d2616;color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0e1424;--surface:#1c2538;--surface2:#141c2f;--text:#e8ecf5;--muted:#9aa6bf;--border:#2c3750;
+  --accent:#a3ea2a;--accent-bg:#a3ea2a;--on-accent:#0e1424;--warn:#ffc561;--warn-bg:#2d2616;color-scheme:dark}
+html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 72px);scroll-behavior:smooth}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font:400 17px/1.65 Ubuntu,"Segoe UI",system-ui,sans-serif}
+a{color:var(--accent)}
+a:focus-visible,button:focus-visible{outline:2px solid var(--accent-bg);outline-offset:2px}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);background:var(--surface);z-index:10}
+.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:9;background:var(--surface);border-bottom:1px solid var(--border)}
+.bar div{max-width:1120px;margin:auto;padding:12px 20px;display:flex;align-items:center;gap:12px}
+.bar b{font-weight:700;font-size:18px}.bar b i{font-style:normal;color:var(--accent)}
+.bar span{color:var(--muted);font-size:14px}
+.prog{height:3px;background:var(--accent-bg);width:0}
+.hero{max-width:1120px;margin:auto;padding:48px 20px 24px}
+.hero h1{font-size:clamp(30px,5vw,48px);line-height:1.15;margin:12px 0 16px;max-width:20em;font-weight:700}
+.hero p.lead{font-size:19px;color:var(--muted);max-width:40em;margin:0 0 20px}
+.tags{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 20px;padding:0;list-style:none}
+.tags li{background:var(--surface);border:1px solid var(--border);border-radius:999px;padding:3px 12px;font-size:14px;color:var(--muted)}
+.tags li.g{background:var(--accent-bg);color:var(--on-accent);border-color:transparent;font-weight:500}
+.jump{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-top:28px}
+.jump a{display:block;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:14px 16px;text-decoration:none;color:var(--text)}
+.jump a:hover{border-color:var(--accent-bg)}
+.jump strong{display:block;font-size:16px}.jump small{color:var(--muted);font-size:14px}
+.wrap{max-width:1120px;margin:auto;padding:16px 20px 64px;display:grid;grid-template-columns:230px minmax(0,1fr);gap:40px}
+nav.toc{position:sticky;top:calc(env(safe-area-inset-top,0px) + 76px);align-self:start;font-size:15px}
+nav.toc p{margin:0 0 8px;color:var(--muted);font-size:14px}
+nav.toc a{display:block;padding:6px 12px;border-left:3px solid var(--border);color:var(--muted);text-decoration:none}
+nav.toc a.sub{padding-left:26px;font-size:14px}
+nav.toc a:hover{color:var(--text)}
+nav.toc a.on{border-left-color:var(--accent-bg);color:var(--text);font-weight:500;background:var(--surface)}
+main{max-width:720px}
+section{margin-bottom:56px}
+h2{font-size:30px;line-height:1.2;margin:0 0 16px}
+h3{font-size:21px;margin:32px 0 8px}
+p{margin:0 0 14px}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:20px 22px;margin:16px 0}
+.card h3,.card h4{margin-top:0}
+.note{background:var(--warn-bg);border-left:4px solid var(--warn);border-radius:10px;padding:16px 20px;margin:16px 0}
+.note strong{color:var(--warn)}
+.big{font-size:20px;font-weight:500;border-left:4px solid var(--accent-bg);padding-left:16px;margin:20px 0}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px;margin:16px 0}
+.grid .card{margin:0}.grid h4{margin:0 0 6px;font-size:17px}.grid p{margin:0;font-size:15px;color:var(--muted)}
+.links{list-style:none;padding:0;margin:8px 0 16px;display:flex;flex-wrap:wrap;gap:8px}
+.links a{display:inline-block;background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:5px 12px;font-size:15px;text-decoration:none}
+.links a:hover{border-color:var(--accent-bg)}
+.scroll{overflow-x:auto;margin:16px 0}
+table{border-collapse:collapse;width:100%;min-width:520px;font-size:15px;background:var(--surface);border-radius:12px}
+th,td{text-align:left;padding:10px 14px;border-bottom:1px solid var(--border);vertical-align:top}
+th{background:var(--surface2);font-weight:500;color:var(--muted)}
+.tabs{display:flex;gap:6px;flex-wrap:wrap;margin:16px 0 0}
+.tabs button{font:inherit;font-size:15px;background:var(--surface);color:var(--text);border:1px solid var(--border);border-radius:10px 10px 0 0;padding:9px 14px;cursor:pointer}
+.tabs button[aria-selected="true"]{background:var(--accent-bg);color:var(--on-accent);border-color:var(--accent-bg);font-weight:500}
+.panel{background:var(--surface);border:1px solid var(--border);border-radius:0 14px 14px 14px;padding:20px 22px}
+.panel[hidden]{display:none}.panel h3{margin-top:0}
+.facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin:14px 0}
+.facts div{background:var(--surface2);border-radius:10px;padding:10px 12px;font-size:14px;color:var(--muted)}
+.facts b{display:block;color:var(--text);font-size:15px;font-weight:500}
+.pro{color:var(--accent)}
+.nav{margin-left:auto;display:flex;gap:6px}
+.nav a{padding:6px 14px;border-radius:999px;color:var(--muted);text-decoration:none;font-size:15px;border:1px solid transparent}
+.nav a:hover{color:var(--text)}
+.nav a[aria-current="page"]{color:var(--text);background:var(--surface2);border-color:var(--border);font-weight:500}
+.wrap.aw{grid-template-columns:300px minmax(0,1fr)}
+.side{position:sticky;top:calc(env(safe-area-inset-top,0px) + 76px);align-self:start}
+.side .card{margin:0}.side h2{font-size:20px;margin:0 0 12px}
+.conn{display:flex;gap:12px;align-items:flex-start;padding:12px;margin:0 -12px;border-radius:10px;text-decoration:none;color:var(--text)}
+.conn:hover{background:var(--surface2)}
+.conn svg{flex:none;width:26px;height:26px;fill:var(--accent);margin-top:2px}
+.conn svg.ln{fill:none;stroke:var(--accent);stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.conn b{display:block;font-weight:500}.conn small{display:block;color:var(--muted);font-size:14px;line-height:1.4;overflow-wrap:anywhere}
+.conn em{display:block;font-style:normal;font-size:14px;margin-top:2px}
+.proj h3{margin:0 0 6px;font-size:19px}.proj p{margin:0 0 10px;font-size:16px}
+.proj .tags{margin:0 0 10px}.proj .tags li{font-size:13px;padding:2px 10px;background:var(--surface2)}
+.btn{display:inline-flex;gap:8px;align-items:center;background:var(--accent-bg);color:var(--on-accent);font-weight:500;font-size:15px;padding:7px 14px;border-radius:8px;text-decoration:none}
+.btn svg{width:16px;height:16px;fill:currentColor}
+.btn:hover{filter:brightness(1.08)}
+.pref{border-left:4px solid var(--accent-bg)}
+code{background:var(--surface2);padding:1px 6px;border-radius:5px;font-size:.9em}
+@media (max-width:860px){.wrap.aw{grid-template-columns:1fr;gap:24px}.side{position:static}}
+@media (max-width:600px){.bar span{display:none}}
+footer{border-top:1px solid var(--border);padding:24px 20px;text-align:center;color:var(--muted);font-size:14px}
+@media (max-width:860px){
+  .wrap{grid-template-columns:1fr;gap:0}
+  nav.toc{position:static;display:flex;gap:6px;overflow-x:auto;padding-bottom:12px;margin-bottom:16px}
+  nav.toc p,nav.toc a.sub{display:none}
+  nav.toc a{border:1px solid var(--border);border-radius:999px;white-space:nowrap;padding:5px 14px}
+  nav.toc a.on{border-color:var(--accent-bg)}
+}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+:root{padding-left:env(safe-area-inset-left,0px);padding-right:env(safe-area-inset-right,0px)}
+main{overflow-wrap:anywhere}
+.nav a,.tabs button,.btn{min-height:40px;display:inline-flex;align-items:center}
+@media (min-width:861px){nav.toc{max-height:calc(100vh - 110px);overflow-y:auto}}
+@media (min-width:1280px){body{font-size:18px}.hero,.wrap,.bar div{max-width:1240px}main{max-width:800px}.wrap{grid-template-columns:260px minmax(0,1fr)}}
+@media (max-width:860px){
+  html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 120px)}
+  nav.toc{position:sticky;top:calc(env(safe-area-inset-top,0px) + 56px);z-index:8;background:var(--bg);margin:0 -16px 16px;padding:8px 16px;border-bottom:1px solid var(--border);scrollbar-width:none}
+  nav.toc::-webkit-scrollbar{display:none}
+  nav.toc a{padding:8px 14px;min-height:38px;display:flex;align-items:center}
+}
+@media (max-width:600px){
+  body{font-size:16px}
+  .bar>div:first-child{min-height:52px;padding:6px 16px}
+  .hero{padding:28px 16px 12px}
+  .hero p.lead{font-size:17px}
+  .wrap{padding:12px 16px 48px}
+  .jump{grid-template-columns:repeat(2,1fr);gap:10px;margin-top:20px}
+  .jump a{padding:12px}.jump strong{font-size:15px}.jump small{font-size:13px}
+  section{margin-bottom:40px}
+  h2{font-size:25px}h3{font-size:19px}
+  .card,.panel{padding:16px}
+  .grid{grid-template-columns:1fr}
+  .tabs{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+  .tabs button{border-radius:10px;justify-content:center;min-height:44px}
+  .panel{border-radius:14px;margin-top:8px}
+  .facts{grid-template-columns:1fr 1fr 1fr;gap:8px}.facts div{padding:8px;font-size:12px}.facts b{font-size:13px}
+  .scroll{overflow:visible}
+  .scroll table{min-width:0}
+  .scroll table,.scroll tbody,.scroll tr,.scroll td{display:block}
+  .scroll tr:first-child{display:none}
+  .scroll tr{padding:12px 14px;border-bottom:1px solid var(--border)}
+  .scroll tr:last-child{border-bottom:0}
+  .scroll td{border:0;padding:2px 0}
+  .scroll td:first-child{margin-bottom:2px}
+  .big{font-size:18px}
+  .links a{padding:8px 12px}
+  .side .card{padding:16px}
+  .conn{padding:12px 8px;margin:0 -8px}
+  .btn{width:100%;justify-content:center}
+}
+</style>
+</head>
+<body>
+<header class="bar"><div><b>Hack<i>Notes</i></b><span>Blog · TryHackMe tips</span><nav class="nav" aria-label="Site"><a href="#top" id="nPost" aria-current="page">Post</a><a href="#about" id="nAbout">About me</a></nav></div><div class="prog" id="prog" style="padding:0;max-width:none;margin:0"></div></header>
+
+<div id="post">
+<div class="hero">
+  <ul class="tags"><li class="g">TryHackMe</li><li>Leagues</li><li>Strategy</li><li>10 min read</li></ul>
+  <h1>How to Get First Place in Every TryHackMe League (While Actually Learning)</h1>
+  <p class="lead">The tips and strategies that took me to first place in every league at least once, without losing sight of the real goal: building skills that can get you a job.</p>
+  <div class="jump">
+    <a href="#points"><strong>Where the points are</strong><small>Quizzes, challenge rooms, events</small></a>
+    <a href="#boosts"><strong>Using point boosts</strong><small>When to open them and what to prepare</small></a>
+    <a href="#strategies"><strong>Four league strategies</strong><small>Even-Split, Sit-and-Pack and more</small></a>
+    <a href="#choose"><strong>Pick your strategy</strong><small>A quick comparison table</small></a>
+  </div>
+</div>
+
+<div class="wrap">
+<nav class="toc" aria-label="Contents" id="toc">
+  <p>On this page</p>
+  <a href="#reminder">Don’t lose sight of the point</a>
+  <a href="#points">1. How to get points</a>
+  <a class="sub" href="#quizzes">Quizzes</a>
+  <a class="sub" href="#rooms">Rooms worth checking out</a>
+  <a href="#boosts">2. Point boosts</a>
+  <a href="#strategies">3. League strategies</a>
+  <a href="#choose">4. Which one to choose</a>
+  <a href="#final">Final thoughts</a>
+</nav>
+
+<main>
+<section id="reminder">
+  <h2>A quick reminder: don’t lose sight of the point</h2>
+  <p>I’m a completionist, so I know the urge to collect badges and watch a progress bar reach 100%. Still, <strong>you can get 10,000 points every week and it means nothing if you haven’t learned anything along the way.</strong></p>
+  <div class="note"><strong>Walkthroughs are fine.</strong> Using write-ups when you’re stuck or hit technical problems is okay. Copying answers just to collect points is not: the badges won’t help if you know nothing about the topics you “covered”.</div>
+  <p>Some people cheat. Don’t let it make your own progress feel worthless. And if chasing first place is hurting your learning, ignore the badges and focus on the best achievement TryHackMe offers: <strong>the skills that eventually get you a job.</strong></p>
+  <p>First, a note on luck: sometimes you just get lucky, but higher leagues are harder because more people are willing to put in serious time.</p>
+</section>
+
+<section id="points">
+  <h2>1. How to get points</h2>
+  <p>Not all rooms are equal. Some take hours for few points, others are quick and generous. Here’s what worked for me.</p>
+
+  <h3 id="quizzes">Quizzes</h3>
+  <p>A great source of points, and some can be done from your phone.</p>
+  <div class="grid">
+    <div class="card"><h4>Weekly recap quizzes</h4><p>One quiz a week on that week’s content. Worth it if you’ve already studied the material.</p></div>
+    <div class="card"><h4>Topic recap quizzes</h4><p>At the end of each module. I skip them at first and return when I have a 50% or 100% boost active.</p></div>
+    <div class="card"><h4>App quizzes</h4><p>Reportedly efficient, but I haven’t tested them with boosts. Try it yourself.</p></div>
+  </div>
+
+  <h3 id="rooms">Rooms worth checking out</h3>
+  <p><em>Points vary by difficulty, and older rooms give fewer.</em></p>
+  <div class="scroll"><table>
+    <tr><th>Room type</th><th>Points</th><th>Notes</th></tr>
+    <tr><td><strong>Walkthrough rooms</strong></td><td>Under 10 per question</td><td>Many questions, quick to finish. Common in Pre Security, Cyber Security 101 and SOC paths. One Snort room gave me over 1,000 points with a boost.</td></tr>
+    <tr><td><strong>Challenge rooms</strong></td><td>About 30–40 per question</td><td>Sort by difficulty and duration under <em>Practice → Challenges</em>.</td></tr>
+    <tr><td><strong>Fixed-point rooms</strong></td><td>Fixed (e.g. 100/200)</td><td>Boosts don’t increase these. Example: <a href="https://tryhackme.com/module/lafbctf2026">Love at First Breach</a>.</td></tr>
+    <tr><td><strong>Event rooms and CTFs</strong></td><td>Up to ~500 per room</td><td>Advent of Cyber and CTFs with many flags.</td></tr>
+  </table></div>
+
+  <h3>CTF rooms</h3>
+  <ul class="links">
+    <li><a href="https://tryhackme.com/room/easyctf">Easy CTF</a></li>
+    <li><a href="https://tryhackme.com/room/ctfcollectionvol1">CTF Collection Vol. 1</a></li>
+    <li><a href="https://tryhackme.com/room/ctfcollectionvol2">CTF Collection Vol. 2</a></li>
+    <li><a href="https://tryhackme.com/room/ctf">CTF</a></li>
+  </ul>
+  <h3>Advent of Cyber rooms</h3>
+  <ul class="links">
+    <li><a href="https://tryhackme.com/room/25daysofchristmas">Advent of Cyber 1</a></li>
+    <li><a href="https://tryhackme.com/room/adventofcyber2">Advent of Cyber 2</a></li>
+    <li><a href="https://tryhackme.com/room/adventofcyber3">Advent of Cyber 3</a></li>
+    <li><a href="https://tryhackme.com/room/adventofcyber4">Advent of Cyber 4</a></li>
+    <li><a href="https://tryhackme.com/room/adventofcyber2023">Advent of Cyber 2023</a></li>
+    <li><a href="https://tryhackme.com/room/adventofcyber2024">Advent of Cyber 2024</a></li>
+    <li><a href="https://tryhackme.com/module/aoc-2025-kra8blxfpajw0vn6">Advent of Cyber 2025</a></li>
+  </ul>
+  <p>Don’t pick rooms on points alone. Use them to practise skills you actually want.</p>
+</section>
+
+<section id="boosts">
+  <h2>2. Point boosts: use them strategically</h2>
+  <p><strong>Where to get them:</strong> chests in learning paths (Pre Security, Cyber Security 101, AI Security) and completing all weekly missions.</p>
+  <div class="scroll"><table>
+    <tr><th>Boost type</th><th>How I use it</th></tr>
+    <tr><td><strong>50% or 100% for 30 min, activates next day</strong></td><td>Prepare ahead. Solve challenge rooms, write down the answers without submitting, then submit them the next day. Best for rooms you can do on your own computer without a VPN or AttackBox. Examples: <a href="https://tryhackme.com/room/c4ptur3th3fl4g">Capture the Flag</a>, <a href="https://tryhackme.com/room/ctfcollectionvol1">CTF Collection Vol. 1</a>, <a href="https://tryhackme.com/room/reverselfiles">ReverseELF</a>.</td></tr>
+    <tr><td><strong>50% or 100% for 30 min, activates immediately</strong></td><td>Short rooms and quizzes. Don’t waste half the boost deciding what to do.</td></tr>
+    <tr><td><strong>20% or 30% for 2–3 hours, activates immediately</strong></td><td>Longer study sessions. Pick rooms with many questions that you can work through without rushing the learning.</td></tr>
+  </table></div>
+  <h3>Extra tips</h3>
+  <div class="card"><ul style="margin:0;padding-left:20px">
+    <li><strong>Don’t open every chest right away.</strong> Save unopened chests for when you need a boost. You can return to finished paths to collect unopened ones.</li>
+    <li><strong>Watch your streak freezes.</strong> Chests and missions can give freezes instead of boosts. Once I had 15 freezes I was guaranteed a boost, but that’s my observation, not a confirmed rule.</li>
+    <li><strong>Plan around weekly missions.</strong> If you’re near finishing them, time the last ones so you can use any boost well.</li>
+  </ul></div>
+  <p class="big">Prepare before you activate a boost, and don’t spend its limited time deciding what to do.</p>
+</section>
+
+<section id="strategies">
+  <h2>3. League strategies: treat it like a race</h2>
+  <p>What works depends on your time, the competition and your effort. Here are four approaches I’ve tried or seen.</p>
+  <div class="tabs" role="tablist" aria-label="League strategies" id="tabs">
+    <button role="tab" aria-selected="true" aria-controls="p0" id="t0">Even-Split</button>
+    <button role="tab" aria-selected="false" aria-controls="p1" id="t1">Sit-and-Pack</button>
+    <button role="tab" aria-selected="false" aria-controls="p2" id="t2">Positive-Split</button>
+    <button role="tab" aria-selected="false" aria-controls="p3" id="t3">Negative-Split</button>
+  </div>
+
+  <div class="panel" role="tabpanel" id="p0" aria-labelledby="t0">
+    <h3>Even-Split: earn a steady number of points every day</h3>
+    <div class="facts"><div>Effort<b>Consistent daily</b></div><div>My result<b>First in Diamond</b></div><div>Risk<b>Low</b></div></div>
+    <p>My favourite, because it rewards consistency and keeps you focused on your own progress. Set a daily target that gives you a good chance at first place. Around 500–1,000 points a day can put you in a strong position in higher leagues, depending on that week’s competition. Check the leaderboard and raise your target if someone is gaining much faster.</p>
+    <p><strong class="pro">Why I like it:</strong> the effort is spread across the week, you keep a learning routine, and you don’t depend on a last-minute grind.</p>
+  </div>
+  <div class="panel" role="tabpanel" id="p1" aria-labelledby="t1" hidden>
+    <h3>Sit-and-Pack: stay close, then push ahead at the end</h3>
+    <div class="facts"><div>Effort<b>Steady, then a final sprint</b></div><div>Needs<b>Leaderboard tracking</b></div><div>Risk<b>Medium</b></div></div>
+    <p>Stay within the top three all week. Pick the maximum gap to first place you’re willing to tolerate, work at a steady pace while it holds, then put in the extra effort on the final day to overtake the leader.</p>
+    <p><strong class="pro">Why it can work:</strong> you don’t have to outpace everyone from day one, and you save energy for the finish.</p>
+    <p><strong>Downside:</strong> you must keep watching the competition, and the leader may not stop earning points.</p>
+  </div>
+  <div class="panel" role="tabpanel" id="p2" aria-labelledby="t2" hidden>
+    <h3>Positive-Split: build a big lead early and hold it</h3>
+    <div class="facts"><div>Effort<b>Heavy at the start</b></div><div>Needs<b>Lots of free time early</b></div><div>Risk<b>Higher</b></div></div>
+    <p>Earn a lot of points at the start of the week to open a gap. Ideally the lead discourages others and lets you ease off later.</p>
+    <p><strong>Downside:</strong> it worked for others but not well for me. The upfront effort is large, there’s no guarantee it’s enough, and someone may be more determined than you.</p>
+  </div>
+  <div class="panel" role="tabpanel" id="p3" aria-labelledby="t3" hidden>
+    <h3>Negative-Split: join the league late with a head start</h3>
+    <div class="facts"><div>Effort<b>Concentrated near the end</b></div><div>Needs<b>Good timing</b></div><div>Risk<b>Highest</b></div></div>
+    <p>The unconventional one. As I understand it, you’re assigned to a league after completing two rooms, so you time that to happen one or two days before the week ends. Earlier, work through longer rooms and submit some questions but leave the rooms unfinished until the last day or two. You then join with a point lead while others are just starting.</p>
+    <p><strong class="pro">Why it can work:</strong> you compete over a shorter window instead of the whole week.</p>
+    <div class="note"><strong>Verify first.</strong> This depends on league assignment and scoring working as expected, and it leaves little room to recover if your timing is off. Check the current league rules, since platform mechanics change.</div>
+  </div>
+</section>
+
+<section id="choose">
+  <h2>4. Which strategy should you choose?</h2>
+  <div class="scroll"><table>
+    <tr><th>If you…</th><th>Choose</th></tr>
+    <tr><td>Prefer consistency and want to focus on learning</td><td><strong>Even-Split</strong></td></tr>
+    <tr><td>Enjoy competition and don’t mind watching the leaderboard</td><td><strong>Sit-and-Pack</strong></td></tr>
+    <tr><td>Have more time at the start of the week</td><td><strong>Positive-Split</strong></td></tr>
+    <tr><td>Can control timing and understand league assignment</td><td><strong>Negative-Split</strong></td></tr>
+  </table></div>
+  <p>Other players’ behaviour is outside your control. You can plan your effort, use boosts well and learn as much as possible, but first place is never guaranteed. I once lost a week with over 5,000 points. <strong>And that’s fine.</strong></p>
+</section>
+
+<section id="final">
+  <h2>Final thoughts</h2>
+  <p>Getting first place is satisfying, and I enjoy it. But the leaderboard is only one part of the experience. Just make sure you’re getting something meaningful from all that effort:</p>
+  <ul>
+    <li>Learn the concepts.</li>
+    <li>Practise the techniques.</li>
+    <li>Go back to rooms you struggled with and solve them again without the answers.</li>
+    <li>Use walkthroughs when you need them, and make sure you understand what you read.</li>
+  </ul>
+  <p class="big">The best achievement isn’t first place in a league. It’s taking what you’ve learned and using it to solve a problem you haven’t seen before.</p>
+  <p>And if that helps you land a job in cybersecurity, that’s a badge worth much more than any number on a leaderboard.</p>
+</section>
+</main>
+</div>
+</div>
+
+<div id="about" hidden>
+<div class="hero">
+  <ul class="tags"><li class="g">About me</li><li>M.Sc. Cybersecurity, BGU</li><li>TryHackMe top 1%</li></ul>
+  <h1>Annie Belkin</h1>
+  <p class="lead">Offensive security, vulnerability research, and the intersection of AI and cybersecurity.</p>
+</div>
+<div class="wrap aw">
+<aside class="side">
+  <div class="card">
+    <h2>Connect</h2>
+    <a class="conn" href="https://www.linkedin.com/in/anniebelkin/"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg><span><b>LinkedIn</b><small>linkedin.com/in/anniebelkin</small><em>Connect or message me about research, collaboration, or technical ideas.</em></span></a>
+    <a class="conn" href="https://github.com/anniebelkin"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg><span><b>GitHub</b><small>github.com/anniebelkin</small><em>Projects and code.</em></span></a>
+    <a class="conn" href="https://tryhackme.com/p/anniebelkin"><svg class="ln" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 22V3"/><path d="M4 4h14l-3 4.5 3 4.5H4"/></svg><span><b>TryHackMe</b><small>tryhackme.com/p/anniebelkin</small><em>Ranked in the top 1% of users.</em></span></a>
+  </div>
+</aside>
+
+<main>
+<section id="bio">
+  <h2>About me</h2>
+  <p>I’m a Computer Science graduate from Ben-Gurion University of the Negev, currently pursuing an M.Sc. in Cybersecurity at BGU. My main interests are offensive security, vulnerability research, and the intersection of AI and cybersecurity.</p>
+  <p>I’m particularly interested in how systems can be exploited, how new attack techniques can be developed, and how machine learning changes the security landscape. I enjoy hands-on technical work that combines programming, experimentation, and security analysis.</p>
+</section>
+
+<section id="interests">
+  <h2>Research interests</h2>
+  <p>I’m especially interested in <strong>Offensive AI</strong> and <strong>vulnerability research</strong>, including attacks against AI-powered systems and agents, the security implications of machine learning, and the use of AI in offensive security.</p>
+  <p>I’m also interested in low-level security research, reverse engineering, and understanding the technical details behind real-world vulnerabilities and exploitation techniques.</p>
+</section>
+
+<section id="projects">
+  <h2>Selected projects</h2>
+  <div class="card proj"><h3>Malicious JavaScript Detection</h3>
+    <ul class="tags"><li>Machine learning</li><li>CodeBERT</li><li>Browser security</li></ul>
+    <p>Developing a hybrid detection architecture that combines lightweight, browser-side machine learning with server-side CodeBERT analysis to identify malicious JavaScript.</p></div>
+  <div class="card proj"><h3>Acoustic Location Fingerprinting</h3>
+    <ul class="tags"><li>CNN</li><li>Audio</li><li>~97% accuracy</li></ul>
+    <p>Trained CNN models on simulated room impulse responses to identify locations from system audio recordings, reaching approximately 97% accuracy across multiple simulated environments.</p></div>
+  <div class="card proj"><h3>Firefox Credential Access via API Hooking PoC</h3>
+    <ul class="tags"><li>C++</li><li>Windows internals</li><li>Reverse engineering</li></ul>
+    <p>Developed a C++ proof of concept that extracts saved Firefox credentials. I researched the dependency chain to patch the Import Address Table (IAT) and hook <code>PK11SDR_Decrypt</code>, logging plaintext usernames and passwords when the browser retrieves them. I also built utilities for DLL injection and runtime memory restoration.</p></div>
+  <div class="card proj"><h3>Cost-Aware LLM Caching</h3>
+    <ul class="tags"><li>LLMs</li><li>GPTCache</li><li>Benchmarking</li></ul>
+    <p>Implemented and benchmarked a cost-aware cache eviction policy for GPTCache, evaluating cache hit rate, latency, and memory usage.</p>
+    <a class="btn" href="https://github.com/anniebelkin/gptcache-cost-aware"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>View on GitHub</a></div>
+  <div class="card proj"><h3>SegAMotion: Video Segmentation</h3>
+    <ul class="tags"><li>Computer vision</li><li>Segmentation</li><li>Motion estimation</li></ul>
+    <p>Developed a video segmentation pipeline combining object detection, segmentation, and motion estimation techniques.</p>
+    <a class="btn" href="https://github.com/anniebelkin/SegAMotion"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>View on GitHub</a></div>
+</section>
+
+<section id="goals">
+  <h2>Current research goals</h2>
+  <p>I’m looking for a master’s thesis supervisor, a thesis topic, and research opportunities, particularly in <strong>Offensive AI, AI security, and vulnerability research</strong>.</p>
+  <p>I’m open to discussing research ideas, potential thesis directions, and different perspectives on technical problems. If you have an interesting research question, a project, or an idea worth exploring, feel free to reach out on LinkedIn.</p>
+  <div class="card pref"><strong>Communication preference:</strong> I prefer direct, purpose-driven messages. If you’re reaching out, please get straight to the point and include the relevant question, idea, or opportunity.</div>
+  <p><a class="btn" href="https://www.linkedin.com/in/anniebelkin/"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>Message me on LinkedIn</a></p>
+</section>
+</main>
+</div>
+</div>
+<footer>Not affiliated with TryHackMe. Platform mechanics may change, so check current rules.</footer>
+
+<script>
+(function(){
+  var links=[].slice.call(document.querySelectorAll('#toc a'));
+  var secs=links.map(function(a){return document.getElementById(a.getAttribute('href').slice(1))});
+  function go(id){var el=document.getElementById(id);if(el)el.scrollIntoView();}
+  links.concat([].slice.call(document.querySelectorAll('.jump a'))).forEach(function(a){
+    a.addEventListener('click',function(e){e.preventDefault();go(a.getAttribute('href').slice(1));try{history.replaceState(null,'',a.getAttribute('href'))}catch(x){}});
+  });
+  function spy(){
+    var y=window.scrollY+120,cur=0;
+    secs.forEach(function(s,i){if(s&&s.getBoundingClientRect().top+window.scrollY<=y)cur=i;});
+    while(cur>0&&links[cur].offsetParent===null)cur--;
+    links.forEach(function(a,i){a.classList.toggle('on',i===cur)});
+    var t=document.getElementById('toc'),ca=links[cur];
+    if(t&&ca&&t.scrollWidth>t.clientWidth&&ca.offsetParent!==null&&spy.last!==cur){spy.last=cur;t.scrollLeft=ca.offsetLeft-t.clientWidth/2+ca.offsetWidth/2;}
+    var h=document.documentElement.scrollHeight-window.innerHeight;
+    document.getElementById('prog').style.width=(h>0?Math.min(100,window.scrollY/h*100):0)+'%';
+  }
+  window.addEventListener('scroll',spy,{passive:true});spy();
+  var tabs=[].slice.call(document.querySelectorAll('#tabs button'));
+  function pick(i){tabs.forEach(function(b,j){b.setAttribute('aria-selected',j===i);document.getElementById('p'+j).hidden=j!==i});}
+  tabs.forEach(function(b,i){
+    b.addEventListener('click',function(){pick(i)});
+    b.addEventListener('keydown',function(e){
+      var n=e.key==='ArrowRight'?(i+1)%4:e.key==='ArrowLeft'?(i+3)%4:-1;
+      if(n>-1){pick(n);tabs[n].focus();}
+    });
+  });
+  var post=document.getElementById('post'),about=document.getElementById('about'),nP=document.getElementById('nPost'),nA=document.getElementById('nAbout');
+  var postTitle=document.title;
+  function view(v){var a=v==='about';about.hidden=!a;post.hidden=a;nA.setAttribute('aria-current',a?'page':'false');nP.setAttribute('aria-current',a?'false':'page');document.title=a?'About Annie Belkin':postTitle;}
+  function nav(v){view(v);window.scrollTo(0,0);try{history.replaceState(null,'',v==='about'?'#about':'#top')}catch(x){}spy();}
+  nA.addEventListener('click',function(e){e.preventDefault();nav('about')});
+  nP.addEventListener('click',function(e){e.preventDefault();nav('post')});
+  function route(){var h=location.hash.slice(1);if(h==='about'){view('about');window.scrollTo(0,0);}else{view('post');if(h&&h!=='top')setTimeout(function(){go(h)},50);}}
+  window.addEventListener('hashchange',route);
+  route();
+})();
+</script>
+</body>
+</html>
